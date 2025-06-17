@@ -1,17 +1,61 @@
 /* Container holding subreddit columns */
 .container {
-    display: flex;
-    flex-direction: row;             /* columns side-by-side */
-    justify-content: flex-start;
-    align-items: flex-start;
-    overflow-x: auto;                /* scroll if many columns */
-     position: relative;
-    height: 600px;
-    outline: 1px solid black ;
+     display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 300px;
+    overflow-x: auto;
+    height: 800px;
+    outline: 1px solid black;
     border-radius: 8px;
     overflow-y: hidden;
 }
+h2{
+    margin-left: 30px;
 
+}
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+/* Tooltip text below */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 160px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 6px 8px;
+  border-radius: 4px;
+
+  position: absolute;
+  top: 170%; /* Push below the element */
+  left: 400%;
+  transform: translateX(-50%);
+  z-index: 3;
+
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* Arrow pointing up to the tooltip target */
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: -5px; 
+  left: 90%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #333 transparent;
+}
+
+/* Show tooltip on hover */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
 /* Add Subreddit icon */
 .material-symbols-outlined {
     font-variation-settings:
@@ -19,12 +63,13 @@
         'wght' 400,
         'GRAD' 0,
         'opsz' 24;
-    position: absolute;
-    top: 3px;
-    left: 3px;
+    position: relative;
+    top: 20px;
+    left: 50px;
     cursor: pointer;
     color: rgb(0, 0, 0);
-    z-index: 7;
+    scale: 1.5;
+
 }
 
 /* Optional vertical dots icon */
@@ -32,24 +77,30 @@
     cursor: pointer;
     rotate: 90deg;
     position: relative;
-    top: 4px;
-    right: -40px;
+    top: 2px;
+    right: 10px;
     color: rgb(0, 0, 0);
+    scale: 1.5;
 }
 
 /* Subreddit column box */
 .subreddit-box {
-  background-color: white;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: auto;
+  width: 300px;
   height: 100%;              /* takes up full height of .container */
   color: black;
   flex-shrink: 0;
-  border-radius: 8px;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid black;
+}
+.disable-center {
+  justify-content: initial !important;
+  align-items: initial !important;
+}
+.subreddit-box.disable-center {
+  display: block !important;
 }
 
 
@@ -61,14 +112,17 @@
     color: black;
     align-items: center;
     justify-content: center;
+  
 }
 
 /* Subreddit form layout */
-.subreddit-form {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    width: 100%;
+
+.form-wrapper {
+  display: flex;
+  justify-content: center;  /* center horizontally */
+  align-items: center;      /* center vertically */
+  height: 100%;             /* fill parent */
+  width: 100%;              /* fill parent */
 }
 
 /* Input field */
@@ -90,25 +144,105 @@
     cursor: pointer;
 }
 
-/* Table styles */
-.subreddit-box table {
+.subreddit-post-list {
+  display: grid;
+  grid-auto-rows: 90px;
+  padding: 0;
+  list-style: none;
   width: 100%;
-  height: 100%;              /* allow it to stretch vertically */
-  border-collapse: collapse;
-  text-align: left;
-  flex-grow: 1;              /* take all remaining vertical space */
-  margin-top: 0;             /* optional: reduce vertical gap */
+}
+.subreddit-post-list li {
+  display: flex;                  /* Flexbox inside each row for control */
+  align-items: center;            /* Center vertically */
+  justify-content: flex-start;    /* Align text to the left */
+  padding: 10px;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+
+  white-space: normal;
+word-break: break-word;
+overflow: hidden;
+
+  border-bottom: 1px solid black;
+}
+.dropdown {
+  position: relative;
+  display: inline-block;
 }
 
-.subreddit-box th {
-    border: none;                    /* no border on header */
-    background-color: #f0f0f0;
-    font-weight: bold;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+.dropbtn {
+  cursor: pointer;
 }
 
-.subreddit-box td {
-    border: 1px solid black;
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #f9f9f9;
+  min-width: 100px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 8px 12px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown-content.show {
+  display: block;
+}
+/* Loading and error messages */
+.loading {
+    color: #1cb817;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 1rem;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.error {
+  color: #dc3545; /* bootstrap red */
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 1rem;
+  background-color: #f8d7da; /* light red background */
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+}
+
+.refreshstate {
+  color: #1cb817; /* bootstrap info teal */
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 1rem;
+  font-style: italic;
+   animation: pulse 1.5s infinite ease-in-out;
+}
+.no-saved-message {
+  margin: 2rem auto;
+  max-width: 500px;
+  background: #f9f9f9;
+  border: 1px dashed #ccc;
+  border-radius: 5px;
+}
+
+/* Simple pulse animation for loading */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
