@@ -29,9 +29,30 @@ console.log(counter);
 
     const newButton = newDiv.querySelector(".subreddit-button");
   newButton.addEventListener("click", () => {
-    const subredditName = newDiv.querySelector(".subreddit-input").value;
-    const subredditId = newDiv.id;
-    console.log(`Adding subreddit "${subredditName}" to "${subredditId}"`);
+    newDiv.innerHTML = `<table>
+  <tr>
+    <th>Company 
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+  <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+</svg>
+</th>
+  </tr>
+  <tr>
+    <td>Alfreds Futterkiste</td>
+  </tr>
+  <tr>
+    <td>Centro comercial Moctezuma</td>
+  </tr>
+  <tr>
+    <td>Ernst Handel</td>
+  </tr>
+  <tr>
+    <td>Island Trading</td>
+  </tr>
+  <tr>
+    <td>Laughing Bacchus Winecellars</td>
+  </tr>
+</table>`
   });
 
 
